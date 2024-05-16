@@ -7,6 +7,9 @@ import VerticalLine from './components/VerticalLine';
 import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
 import { useAuth } from './hooks/useAuth';
+import DispatchPage from './pages/Dispatch';
+import NewJobPage from './pages/NewJob';
+import JobPage from './pages/Job';
 
 function App() {
   const { brand, link, info } = useHeader();
@@ -42,8 +45,11 @@ function App() {
       </AppShell.Header>
       <AppShell.Main>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<DispatchPage />} />
+          <Route path="/new" element={<NewJobPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/job/:jobId" element={<JobPage />} />
         </Routes>
       </AppShell.Main>
     </AppShell>
