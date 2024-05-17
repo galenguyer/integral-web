@@ -1,6 +1,6 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
 import { MantineProvider } from '@mantine/core';
 import { AuthProvider } from './hooks/useAuth';
 
@@ -23,4 +23,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       </MantineProvider>
     </BrowserRouter>
   </React.StrictMode>,
-)
+);
