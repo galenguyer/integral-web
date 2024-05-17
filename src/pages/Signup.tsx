@@ -1,10 +1,4 @@
-import {
-  Button,
-  Center,
-  PasswordInput,
-  Stack,
-  TextInput,
-} from '@mantine/core';
+import { Button, Center, PasswordInput, Stack, TextInput } from '@mantine/core';
 import { useAuth } from '../hooks/useAuth';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';

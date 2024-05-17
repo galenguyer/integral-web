@@ -33,6 +33,18 @@ const JobPage = () => {
     });
   };
 
+  const closeJob = () => {
+    fetch(`/api/v0/jobs/close?id=${jobId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+      },
+    }).then(() => {
+      setNewComment('');
+      mutateJob();
+    });
+  };
+
   if (isLoading || !job) {
     return <RequireAuth>Loading..</RequireAuth>;
   }
@@ -51,12 +63,19 @@ const JobPage = () => {
           </p>
         );
       })}
-      <TextInput
-        placeholder="New Comment"
-        value={newComment}
-        onChange={(e) => setNewComment(e.target.value)}
-      ></TextInput>
-      <Button onClick={() => submitComment()}>Add Comment</Button>
+      {job.closedAt == null && (
+        <>
+          <TextInput
+            placeholder="New Comment"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          ></TextInput>
+          <Button onClick={() => submitComment()}>Add Comment</Button>
+          <Button color="red" onClick={() => closeJob()}>
+            Close Job
+          </Button>
+        </>
+      )}
     </RequireAuth>
   );
 };
