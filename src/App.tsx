@@ -12,6 +12,7 @@ import NewJobPage from './pages/NewJob';
 import JobPage from './pages/Job';
 import ResourcesPage from './pages/Resources';
 import NewResourcePage from './pages/NewResource';
+import DashboardPage from './pages/Dashboard';
 
 function App() {
   const { brand, link } = useHeader();
@@ -41,7 +42,7 @@ function App() {
                   <Text py={mobile ? '0' : ''}>{info}</Text>
                 </>
               )} */}
-              <SimpleLink to="/">Jobs</SimpleLink>
+              <SimpleLink to="/jobs">Jobs</SimpleLink>
               <VerticalLine />
               <SimpleLink to="/resources">Resources</SimpleLink>
             </Group>
@@ -54,9 +55,10 @@ function App() {
         </AppShell.Header>
         <AppShell.Main>
           <Routes>
-            <Route path="/" element={<JobsPage />} />
+            <Route path="/" element={<DashboardPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/jobs" element={<JobsPage />} />
             <Route path="/jobs/new" element={<NewJobPage />} />
             <Route path="/jobs/:jobId" element={<JobPage />} />
             <Route path="/resources" element={<ResourcesPage />} />

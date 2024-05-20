@@ -7,10 +7,7 @@ const ResourcesPage = () => {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  const {
-    resources,
-    mutateResources,
-  }: { resources: any[]; mutateResources: any } = useResources();
+  const { resources, mutateResources } = useResources();
 
   const setInService = (id: string, inService: boolean) => {
     fetch('/api/v0/resources/inservice', {
@@ -35,7 +32,7 @@ const ResourcesPage = () => {
           />
         </Table.Td>
         <Table.Td>
-          {r.assignment ? 'On a Call' : 'Available for Assignment'}
+          {r.currentAssignment ? 'On a Call' : 'Available for Assignment'}
         </Table.Td>
         <Table.Td>{r.comment}</Table.Td>
       </Table.Tr>

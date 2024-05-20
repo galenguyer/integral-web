@@ -130,7 +130,10 @@ const JobPage = () => {
             Assigned Resources:{' '}
             {resources &&
               resources
-                .filter((r) => r.currentAssignment && r.currentAssignment.jobId == job.id)
+                .filter(
+                  (r) =>
+                    r.currentAssignment && r.currentAssignment.jobId == job.id,
+                )
                 .map((r) => {
                   return (
                     <Card p="xs" m="xs" withBorder>
@@ -158,8 +161,8 @@ const JobPage = () => {
             <Button
               disabled={
                 resources == undefined ||
-                resources.filter((r) => !r.currentAssignment && r.inService).length ==
-                  0
+                resources.filter((r) => !r.currentAssignment && r.inService)
+                  .length == 0
               }
               onClick={() => assignUnit()}
             >
