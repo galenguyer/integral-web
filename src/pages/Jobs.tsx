@@ -16,7 +16,7 @@ const JobTableRow = ({
   const assignedResources =
     resources &&
     resources
-      .filter((r) => r.assignment && r.assignment.jobId == job.id)
+      .filter((r) => r.currentAssignment && r.currentAssignment.jobId == job.id)
       .map((r) => r.displayName);
 
   const jobStatus = job.closedAt

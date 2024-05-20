@@ -24,7 +24,7 @@ export interface IResource {
   displayName: string;
   comment: string | undefined;
   inService: boolean;
-  assignment: IAssignment;
+  currentAssignment: IAssignment;
 }
 
 export interface IAssignment {

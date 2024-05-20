@@ -93,13 +93,13 @@ const JobPage = () => {
 
   const comments = job.comments.concat(
     resources
-      .filter((r) => r.assignment && r.assignment.jobId == job.id)
+      .filter((r) => r.currentAssignment && r.currentAssignment.jobId == job.id)
       .map((r) => {
         return {
           id: r.id,
-          createdAt: r.assignment.assignedAt,
-          createdBy: r.assignment.assignedBy,
-          jobId: r.assignment.jobId,
+          createdAt: r.currentAssignment.assignedAt,
+          createdBy: r.currentAssignment.assignedBy,
+          jobId: r.currentAssignment.jobId,
           comment: `Assigned ${r.displayName}`,
         };
       }),
@@ -130,7 +130,7 @@ const JobPage = () => {
             Assigned Resources:{' '}
             {resources &&
               resources
-                .filter((r) => r.assignment && r.assignment.jobId == job.id)
+                .filter((r) => r.currentAssignment && r.currentAssignment.jobId == job.id)
                 .map((r) => {
                   return (
                     <Card p="xs" m="xs" withBorder>
@@ -138,7 +138,7 @@ const JobPage = () => {
                         {r.displayName}{' '}
                         <CloseButton
                           size="xs"
-                          onClick={() => unAssignUnit(r.assignment.id)}
+                          onClick={() => unAssignUnit(r.currentAssignment.id)}
                         />
                       </Group>
                     </Card>
@@ -151,14 +151,14 @@ const JobPage = () => {
               data={
                 resources &&
                 resources
-                  .filter((r) => !r.assignment && r.inService)
+                  .filter((r) => !r.currentAssignment && r.inService)
                   .map((r) => ({ label: r.displayName, value: r.id }))
               }
             />
             <Button
               disabled={
                 resources == undefined ||
-                resources.filter((r) => !r.assignment && r.inService).length ==
+                resources.filter((r) => !r.currentAssignment && r.inService).length ==
                   0
               }
               onClick={() => assignUnit()}
