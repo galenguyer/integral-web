@@ -150,16 +150,8 @@ const JobPage = () => {
           </Group>
         </>
       )}
-      {job.comments.map((comment: any) => {
-        return (
-          <p>
-            {new Date(comment.createdAt * 1000).toLocaleTimeString()} -{' '}
-            {comment.comment}
-          </p>
-        );
-      })}
       {job.closedAt == null && (
-        <Group>
+        <Group pt='lg'>
           <TextInput
             placeholder="New Comment"
             value={newComment}
@@ -168,6 +160,14 @@ const JobPage = () => {
           <Button onClick={() => submitComment()}>Add Comment</Button>
         </Group>
       )}
+      {job.comments.sort((a: any, b: any) => b.createdAt - a.createdAt).map((comment: any) => {
+        return (
+          <p>
+            {new Date(comment.createdAt * 1000).toLocaleTimeString()} -{' '}
+            {comment.comment}
+          </p>
+        );
+      })}
     </RequireAuth>
   );
 };

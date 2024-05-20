@@ -45,7 +45,7 @@ function App() {
               <VerticalLine />
               <SimpleLink to="/resources">Resources</SimpleLink>
             </Group>
-            {auth.isAuthenticated() ? <span>{auth.getDn()}</span> : ''}
+            {!mobile && auth.isAuthenticated() ? <span>{auth.getDn()}</span> : ''}
           </Group>
         </AppShell.Header>
         <AppShell.Main>
