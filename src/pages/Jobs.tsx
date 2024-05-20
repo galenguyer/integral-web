@@ -37,7 +37,7 @@ const JobTableRow = ({
       <Table.Td>{new Date(job.createdAt * 1000).toLocaleTimeString()}</Table.Td>
       <Table.Td>{jobStatus}</Table.Td>
       <Table.Td>
-        <Button onClick={() => navigate(`/jobs/${job.id}`)}>Open</Button>
+        <Button onClick={() => navigate(`/jobs/${job.id}`)}>Details</Button>
       </Table.Td>
     </Table.Tr>
   );
