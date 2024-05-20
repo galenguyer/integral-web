@@ -18,10 +18,7 @@ const JobPage = () => {
 
   //@ts-ignore
   const { job, isLoading, mutateJob } = useJob(jobId);
-  const {
-    resources,
-    mutateResources,
-  }: { resources: any[]; mutateResources: any } = useResources();
+  const { resources, mutateResources } = useResources();
 
   const submitComment = () => {
     if (newComment == '') {
@@ -93,6 +90,20 @@ const JobPage = () => {
   if (isLoading || !job) {
     return <RequireAuth>Loading..</RequireAuth>;
   }
+
+  const comments = job.comments.concat(
+    resources
+      .filter((r) => r.assignment && r.assignment.jobId == job.id)
+      .map((r) => {
+        return {
+          id: r.id,
+          createdAt: r.assignment.assignedAt,
+          createdBy: r.assignment.assignedBy,
+          jobId: r.assignment.jobId,
+          comment: `Assigned ${r.displayName}`,
+        };
+      }),
+  );
 
   return (
     <RequireAuth>
@@ -167,7 +178,7 @@ const JobPage = () => {
           <Button onClick={() => submitComment()}>Add Comment</Button>
         </Group>
       )}
-      {job.comments
+      {comments
         .sort((a: any, b: any) => b.createdAt - a.createdAt)
         .map((comment: any) => {
           return (
