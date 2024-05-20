@@ -96,12 +96,18 @@ const JobPage = () => {
 
   return (
     <RequireAuth>
-      <Group justify='space-between'><h2>{job.synopsis}</h2>
-      {job.closedAt == null && <Button color="red" onClick={() => closeJob()}>
+      <Group justify="space-between">
+        <h2>{job.synopsis}</h2>
+        {job.closedAt == null && (
+          <Button color="red" onClick={() => closeJob()}>
             Close Job
-          </Button>}</Group>
+          </Button>
+        )}
+      </Group>
       <p>Opened at: {new Date(job.createdAt * 1000).toLocaleTimeString()}</p>
-      {job.closedAt && <p>Closed At: {new Date(job.closedAt * 1000).toLocaleTimeString()}</p>}
+      {job.closedAt && (
+        <p>Closed At: {new Date(job.closedAt * 1000).toLocaleTimeString()}</p>
+      )}
       <Group>
         <p>Caller Name: {job.callerName}</p>
         <p>Caller Phone: {job.callerPhone}</p>
@@ -152,7 +158,7 @@ const JobPage = () => {
         </>
       )}
       {job.closedAt == null && (
-        <Group pt='lg'>
+        <Group pt="lg">
           <TextInput
             placeholder="New Comment"
             value={newComment}
@@ -161,14 +167,16 @@ const JobPage = () => {
           <Button onClick={() => submitComment()}>Add Comment</Button>
         </Group>
       )}
-      {job.comments.sort((a: any, b: any) => b.createdAt - a.createdAt).map((comment: any) => {
-        return (
-          <p>
-            {new Date(comment.createdAt * 1000).toLocaleTimeString()} -{' '}
-            {comment.comment}
-          </p>
-        );
-      })}
+      {job.comments
+        .sort((a: any, b: any) => b.createdAt - a.createdAt)
+        .map((comment: any) => {
+          return (
+            <p>
+              {new Date(comment.createdAt * 1000).toLocaleTimeString()} -{' '}
+              {comment.comment}
+            </p>
+          );
+        })}
     </RequireAuth>
   );
 };

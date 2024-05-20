@@ -1,9 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import { RequireAuth } from '../hooks/useAuth';
-import { Button, Space, Table } from '@mantine/core';
+import { Button, Table } from '@mantine/core';
 import { useJobs, useResources } from '../hooks/useData';
+import { IJob, IResource } from '../types';
 
-const JobTableRow = ({ job, resources }: { job: any; resources: any[] }) => {
+const JobTableRow = ({
+  job,
+  resources,
+}: {
+  job: IJob;
+  resources: IResource[];
+}) => {
   const navigate = useNavigate();
 
   const assignedResources =
@@ -14,7 +21,7 @@ const JobTableRow = ({ job, resources }: { job: any; resources: any[] }) => {
 
   const jobStatus = job.closedAt
     ? 'Closed'
-    : (assignedResources && assignedResources.length > 0)
+    : assignedResources && assignedResources.length > 0
       ? 'In Progress'
       : 'Pending Assignment';
   const backgroundColor = {
@@ -39,8 +46,8 @@ const JobTableRow = ({ job, resources }: { job: any; resources: any[] }) => {
 const JobsPage = () => {
   const navigate = useNavigate();
 
-  const { jobs }: { jobs: any[] } = useJobs();
-  const { resources }: { resources: any[] } = useResources();
+  const { jobs } = useJobs();
+  const { resources } = useResources();
 
   const rows =
     jobs &&
@@ -64,8 +71,6 @@ const JobsPage = () => {
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
-
-      <Space h="lg" />
     </RequireAuth>
   );
 };

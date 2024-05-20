@@ -1,5 +1,6 @@
-import useSWR from 'swr';
+import useSWR, { KeyedMutator } from 'swr';
 import { useAuth } from './useAuth';
+import { IJob, IResource } from '../types';
 
 const fetcher = (...args: any[]) =>
   // @ts-ignore
@@ -15,7 +16,17 @@ const fetcher = (...args: any[]) =>
 export const useResources = () => {
   const auth = useAuth();
 
-  const { data, error, isLoading, mutate } = useSWR(
+  const {
+    data,
+    error,
+    isLoading,
+    mutate,
+  }: {
+    data: IResource[];
+    error: any;
+    isLoading: boolean;
+    mutate: KeyedMutator<any>;
+  } = useSWR(
     [
       '/api/v0/resources',
       {
@@ -39,7 +50,17 @@ export const useResources = () => {
 export const useJobs = () => {
   const auth = useAuth();
 
-  const { data, error, isLoading, mutate } = useSWR(
+  const {
+    data,
+    error,
+    isLoading,
+    mutate,
+  }: {
+    data: IJob[];
+    error: any;
+    isLoading: boolean;
+    mutate: KeyedMutator<any>;
+  } = useSWR(
     [
       '/api/v0/jobs',
       {
@@ -63,18 +84,24 @@ export const useJobs = () => {
 export const useJob = (jobId: string) => {
   const auth = useAuth();
 
-  const { data, error, isLoading, mutate } = useSWR(
-    [
-      `/api/v0/jobs?id=${jobId}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
+  const {
+    data,
+    error,
+    isLoading,
+    mutate,
+  }: { data: IJob; error: any; isLoading: boolean; mutate: KeyedMutator<any> } =
+    useSWR(
+      [
+        `/api/v0/jobs?id=${jobId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
         },
-      },
-    ],
-    ([a, b]) => fetcher(a, b),
-  );
+      ],
+      ([a, b]) => fetcher(a, b),
+    );
 
   return {
     job: data,
