@@ -79,11 +79,21 @@ const DashboardPage = () => {
         <Card
           style={{
             backgroundColor:
-            jobsPendingAssignment && jobsPendingAssignment.length == 0 ? undefined : 'yellow',
+              jobsPendingAssignment && jobsPendingAssignment.length == 0
+                ? undefined
+                : 'yellow',
           }}
           withBorder
         >
-          {jobsPendingAssignment && jobsPendingAssignment.length} Pending Assignment
+          {jobsPendingAssignment && jobsPendingAssignment.length} Pending
+          Assignment
+        </Card>
+        <Card withBorder>
+          {resources &&
+            resources.filter(
+              (r) => r.inService && r.currentAssignment == undefined,
+            ).length}{' '}
+          Available Units
         </Card>
       </Group>
       <SimpleGrid cols={2}>
