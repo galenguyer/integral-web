@@ -75,15 +75,15 @@ const DashboardPage = () => {
   return (
     <RequireAuth>
       <Group justify="center" gap="xl">
-        <Card withBorder>{openJobs.length} Open Jobs</Card>
+        <Card withBorder>{openJobs && openJobs.length} Open Jobs</Card>
         <Card
           style={{
             backgroundColor:
-              jobsPendingAssignment.length == 0 ? undefined : 'yellow',
+            jobsPendingAssignment && jobsPendingAssignment.length == 0 ? undefined : 'yellow',
           }}
           withBorder
         >
-          {jobsPendingAssignment.length} Pending Assignment
+          {jobsPendingAssignment && jobsPendingAssignment.length} Pending Assignment
         </Card>
       </Group>
       <SimpleGrid cols={2}>
