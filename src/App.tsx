@@ -23,7 +23,7 @@ function App() {
       <AppShell
         header={{ height: 60 }}
         footer={mobile ? { height: 60 } : undefined}
-        padding={mobile ? 'md' : '6em'}
+        padding={mobile ? 'md' : 'lg'}
       >
         <AppShell.Header p="sm" px={mobile ? 'sm' : 'xl'}>
           <Group justify="space-between">

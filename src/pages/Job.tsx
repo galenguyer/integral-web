@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { RequireAuth, useAuth } from '../hooks/useAuth';
-import { Button, NativeSelect, TextInput } from '@mantine/core';
+import { Button, Group, NativeSelect, TextInput } from '@mantine/core';
 import { useState } from 'react';
 import { useJob, useResources } from '../hooks/useData';
 
@@ -75,9 +75,11 @@ const JobPage = () => {
     <RequireAuth>
       <h3>{job.synopsis}</h3>
       <p>Opened at: {new Date(job.createdAt * 1000).toLocaleTimeString()}</p>
+      <Group>
       <p>Caller Name: {job.callerName}</p>
       <p>Caller Phone: {job.callerPhone}</p>
       <p>Location: {job.location}</p>
+      </Group>
       {job.closedAt == null && (
         <>
           <p>
@@ -85,18 +87,23 @@ const JobPage = () => {
             {resources &&
               resources
                 .filter((r) => r.assignment && r.assignment.jobId == job.id)
-                .map((r) => r.displayName)}
+                .map((r) => r.displayName)
+                .join(', ')}
           </p>
-          <NativeSelect
-            id="newAssignmentSelect"
-            data={
-              resources &&
-              resources
-                .filter((r) => !r.assignment && r.inService)
-                .map((r) => ({ label: r.displayName, value: r.id }))
-            }
-          />
-          <Button onClick={() => assignUnit()}>Assign Unit</Button>
+          <Group>
+            <NativeSelect
+              id="newAssignmentSelect"
+              miw={'320'}
+              pr="lg"
+              data={
+                resources &&
+                resources
+                  .filter((r) => !r.assignment && r.inService)
+                  .map((r) => ({ label: r.displayName, value: r.id }))
+              }
+            />
+            <Button onClick={() => assignUnit()}>Assign Unit</Button>
+          </Group>
         </>
       )}
       {job.comments.map((comment: any) => {

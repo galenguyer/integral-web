@@ -29,7 +29,8 @@ const JobsPage = () => {
               : resources &&
                 resources
                   .filter((r) => r.assignment && r.assignment.jobId == job.id)
-                  .map((r) => r.displayName)}
+                  .map((r) => r.displayName)
+                  .join(', ')}
           </Table.Td>
         </Table.Tr>
       ));
