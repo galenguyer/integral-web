@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from '@mantine/core';
+import { Button, Group, Stack, TextInput } from '@mantine/core';
 import { RequireAuth, useAuth } from '../hooks/useAuth';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -50,16 +50,18 @@ const NewJobPage = () => {
           value={location}
           onChange={(event) => setLocation(event.currentTarget.value)}
         />
-        <TextInput
-          label="Caller Name"
-          value={callerName}
-          onChange={(event) => setCallerName(event.currentTarget.value)}
-        />
-        <TextInput
-          label="Caller Phone Number"
-          value={callerPhone}
-          onChange={(event) => setCallerPhone(event.currentTarget.value)}
-        />
+        <Group grow gap="xl">
+          <TextInput
+            label="Caller Name"
+            value={callerName}
+            onChange={(event) => setCallerName(event.currentTarget.value)}
+          />
+          <TextInput
+            label="Caller Phone Number"
+            value={callerPhone}
+            onChange={(event) => setCallerPhone(event.currentTarget.value)}
+          />
+        </Group>
         <TextInput
           label="Comments"
           description="Any additional information"
