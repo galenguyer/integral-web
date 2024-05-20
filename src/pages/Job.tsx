@@ -96,7 +96,10 @@ const JobPage = () => {
 
   return (
     <RequireAuth>
-      <h3>{job.synopsis}</h3>
+      <Group justify='space-between'><h2>{job.synopsis}</h2>
+      {job.closedAt == null && <Button color="red" onClick={() => closeJob()}>
+            Close Job
+          </Button>}</Group>
       <p>Opened at: {new Date(job.createdAt * 1000).toLocaleTimeString()}</p>
       <Group>
         <p>Caller Name: {job.callerName}</p>
@@ -156,17 +159,14 @@ const JobPage = () => {
         );
       })}
       {job.closedAt == null && (
-        <>
+        <Group>
           <TextInput
             placeholder="New Comment"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
           ></TextInput>
           <Button onClick={() => submitComment()}>Add Comment</Button>
-          <Button color="red" onClick={() => closeJob()}>
-            Close Job
-          </Button>
-        </>
+        </Group>
       )}
     </RequireAuth>
   );
