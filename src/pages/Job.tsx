@@ -54,7 +54,7 @@ const JobPage = () => {
   };
 
   const assignUnit = () => {
-    fetch('/api/v0/resources/assign', {
+    fetch('/api/v0/assignments', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${auth.token}`,
@@ -72,7 +72,7 @@ const JobPage = () => {
   };
 
   const unAssignUnit = (assignmentId: string) => {
-    fetch('/api/v0/resources/assign', {
+    fetch('/api/v0/assignments', {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${auth.token}`,
