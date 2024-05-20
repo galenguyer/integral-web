@@ -9,7 +9,6 @@ export const FeaturesProvider = ({ children }: { children: any }) => {
     fetch('/api/v0/features')
       .then((response) => response.json())
       .then((data) => {
-        console.debug('features:', data);
         setFeatures(data);
       })
       .catch((error) => {

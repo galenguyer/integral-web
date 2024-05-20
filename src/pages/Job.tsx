@@ -75,6 +75,8 @@ const JobPage = () => {
     <RequireAuth>
       <h3>{job.synopsis}</h3>
       <p>Opened at: {new Date(job.createdAt * 1000).toLocaleTimeString()}</p>
+      <p>Caller Name: {job.callerName}</p>
+      <p>Caller Phone: {job.callerPhone}</p>
       <p>Location: {job.location}</p>
       {job.closedAt == null && (
         <>

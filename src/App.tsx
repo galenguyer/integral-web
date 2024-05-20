@@ -1,5 +1,5 @@
 import isMobile from './hooks/useIsMobile';
-import { AppShell, Group, Title, Text } from '@mantine/core';
+import { AppShell, Group, Title } from '@mantine/core';
 import { Routes, Route } from 'react-router-dom';
 import { useHeader } from './hooks/useHeader';
 import SimpleLink from './components/SimpleLink';
@@ -11,9 +11,10 @@ import JobsPage from './pages/Jobs';
 import NewJobPage from './pages/NewJob';
 import JobPage from './pages/Job';
 import ResourcesPage from './pages/Resources';
+import NewResourcePage from './pages/NewResource';
 
 function App() {
-  const { brand, link, info } = useHeader();
+  const { brand, link } = useHeader();
   const auth = useAuth();
   const mobile = isMobile();
 
@@ -34,12 +35,15 @@ function App() {
               ) : (
                 <Title order={2}>{brand}</Title>
               )}
-              {info && (
+              {/* {info && (
                 <>
                   {!mobile ? <VerticalLine /> : ''}{' '}
                   <Text py={mobile ? '0' : ''}>{info}</Text>
                 </>
-              )}
+              )} */}
+              <SimpleLink to="/">Jobs</SimpleLink>
+              <VerticalLine />
+              <SimpleLink to="/resources">Resources</SimpleLink>
             </Group>
             {auth.isAuthenticated() ? <span>{auth.getDn()}</span> : ''}
           </Group>
@@ -52,6 +56,7 @@ function App() {
             <Route path="/jobs/new" element={<NewJobPage />} />
             <Route path="/jobs/:jobId" element={<JobPage />} />
             <Route path="/resources" element={<ResourcesPage />} />
+            <Route path="/resources/new" element={<NewResourcePage />} />
           </Routes>
         </AppShell.Main>
       </AppShell>

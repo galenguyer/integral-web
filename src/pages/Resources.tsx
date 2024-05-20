@@ -37,6 +37,7 @@ const ResourcesPage = () => {
         <Table.Td>
           {r.assignment ? 'On a Call' : 'Available for Assignment'}
         </Table.Td>
+        <Table.Td>{r.comment}</Table.Td>
       </Table.Tr>
     ));
 
@@ -48,6 +49,7 @@ const ResourcesPage = () => {
             <Table.Th>Unit Name</Table.Th>
             <Table.Th>In Service</Table.Th>
             <Table.Th>Call</Table.Th>
+            <Table.Th>Comments</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>

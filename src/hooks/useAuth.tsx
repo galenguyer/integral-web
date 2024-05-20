@@ -16,7 +16,9 @@ export const AuthProvider = ({ children }: { children: any }) => {
   let signout = (callback: any) => {
     setToken(null);
     localStorage.removeItem('token');
-    callback();
+    if (callback != undefined) {
+      callback();
+    }
   };
 
   let isAuthenticated = () => {
