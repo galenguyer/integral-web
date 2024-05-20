@@ -17,7 +17,7 @@ const SignupPage = () => {
   const [emailValid, setEmailValid] = useState(true);
   const [passwordValid, setPasswordValid] = useState(true);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
-  const [error, setError] = useState(false);
+  const [_error, setError] = useState(false);
 
   let from = location.state?.from?.pathname || '/';
 

@@ -8,7 +8,6 @@ const JobPage = () => {
   const { jobId } = useParams();
   const auth = useAuth();
   const [newComment, setNewComment] = useState('');
-  const [newAssignment, setNewAssignment] = useState('');
 
   //@ts-ignore
   const { job, isLoading, mutateJob } = useJob(jobId);

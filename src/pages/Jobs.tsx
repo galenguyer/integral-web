@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { RequireAuth, useAuth } from '../hooks/useAuth';
+import { RequireAuth } from '../hooks/useAuth';
 import { Button, Space, Table } from '@mantine/core';
 import SimpleLink from '../components/SimpleLink';
 import { useJobs, useResources } from '../hooks/useData';
