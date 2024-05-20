@@ -14,7 +14,7 @@ const JobTableRow = ({ job, resources }: { job: any; resources: any[] }) => {
 
   const jobStatus = job.closedAt
     ? 'Closed'
-    : assignedResources.length > 0
+    : (assignedResources && assignedResources.length > 0)
       ? 'In Progress'
       : 'Pending Assignment';
   const backgroundColor = {
