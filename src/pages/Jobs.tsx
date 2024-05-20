@@ -13,23 +13,27 @@ const JobsPage = () => {
 
   const rows =
     jobs &&
-    jobs.map((job) => (
-      <Table.Tr key={job.id}>
-        <SimpleLink to={`/jobs/${job.id}`}>
-          <Table.Td>{job.synopsis}</Table.Td>
-        </SimpleLink>
-        <Table.Td>{job.location}</Table.Td>
-        <Table.Td>
-          {new Date(job.createdAt * 1000).toLocaleTimeString()}
-        </Table.Td>
-        <Table.Td>
-          {resources &&
-            resources
-              .filter((r) => r.assignment && r.assignment.jobId == job.id)
-              .map((r) => r.displayName)}
-        </Table.Td>
-      </Table.Tr>
-    ));
+    jobs
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .map((job) => (
+        <Table.Tr key={job.id}>
+          <SimpleLink to={`/jobs/${job.id}`}>
+            <Table.Td>{job.synopsis}</Table.Td>
+          </SimpleLink>
+          <Table.Td>{job.location}</Table.Td>
+          <Table.Td>
+            {new Date(job.createdAt * 1000).toLocaleTimeString()}
+          </Table.Td>
+          <Table.Td>
+            {job.closedAt
+              ? 'Closed'
+              : resources &&
+                resources
+                  .filter((r) => r.assignment && r.assignment.jobId == job.id)
+                  .map((r) => r.displayName)}
+          </Table.Td>
+        </Table.Tr>
+      ));
 
   return (
     <RequireAuth>

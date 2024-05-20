@@ -29,52 +29,45 @@ const NewJobPage = () => {
       }),
     })
       .then((res) => res.json())
-      .then((data) => navigate(`/job/${data.id}`));
+      .then((data) => navigate(`/jobs/${data.id}`));
   };
 
   return (
     <RequireAuth>
-      <Center>
-        <Stack>
-          <h2>New Job</h2>
-          <TextInput
-            miw="400"
-            label="Synopsis"
-            description="A brief description of the call"
-            value={synopsis}
-            onChange={(event) => setSynopsis(event.currentTarget.value)}
-          />
-          <TextInput
-            miw="400"
-            label="Location"
-            description="Location of the event"
-            value={location}
-            onChange={(event) => setLocation(event.currentTarget.value)}
-          />
-          <TextInput
-            miw="400"
-            label="Caller Name"
-            value={callerName}
-            onChange={(event) => setCallerName(event.currentTarget.value)}
-          />
-          <TextInput
-            miw="400"
-            label="Caller Phone Number"
-            value={callerPhone}
-            onChange={(event) => setCallerPhone(event.currentTarget.value)}
-          />
-          <TextInput
-            miw="400"
-            label="Comments"
-            description="Any additional information"
-            value={comments}
-            onChange={(event) => setComments(event.currentTarget.value)}
-          />
-          <Button onClick={() => handleSubmit()} fullWidth>
-            Create Job
-          </Button>
-        </Stack>
-      </Center>
+      <Stack>
+        <h2>New Job</h2>
+        <TextInput
+          label="Synopsis"
+          description="A brief description of the call"
+          value={synopsis}
+          onChange={(event) => setSynopsis(event.currentTarget.value)}
+        />
+        <TextInput
+          label="Location"
+          description="Location of the event"
+          value={location}
+          onChange={(event) => setLocation(event.currentTarget.value)}
+        />
+        <TextInput
+          label="Caller Name"
+          value={callerName}
+          onChange={(event) => setCallerName(event.currentTarget.value)}
+        />
+        <TextInput
+          label="Caller Phone Number"
+          value={callerPhone}
+          onChange={(event) => setCallerPhone(event.currentTarget.value)}
+        />
+        <TextInput
+          label="Comments"
+          description="Any additional information"
+          value={comments}
+          onChange={(event) => setComments(event.currentTarget.value)}
+        />
+        <Button onClick={() => handleSubmit()} fullWidth>
+          Create Job
+        </Button>
+      </Stack>
     </RequireAuth>
   );
 };
