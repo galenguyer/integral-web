@@ -1,4 +1,4 @@
-import { Button, Center, Stack, TextInput } from '@mantine/core';
+import { Button, Stack, TextInput } from '@mantine/core';
 import { RequireAuth, useAuth } from '../hooks/useAuth';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +23,9 @@ const NewJobPage = () => {
       body: JSON.stringify({
         synopsis: synopsis,
         location: location,
-        comments: [`Caller: ${callerName} - ${callerPhone}`, comments]
+        callerName: callerName,
+        callerPhone: callerPhone,
+        comments: [comments]
           .map((s: string) => s.trim())
           .filter((s) => s != ''),
       }),

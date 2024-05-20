@@ -5,7 +5,6 @@ import SimpleLink from '../components/SimpleLink';
 import { useJobs, useResources } from '../hooks/useData';
 
 const JobsPage = () => {
-  const auth = useAuth();
   const navigate = useNavigate();
 
   const { jobs }: { jobs: any[] } = useJobs();
