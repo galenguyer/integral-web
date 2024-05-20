@@ -101,6 +101,7 @@ const JobPage = () => {
             Close Job
           </Button>}</Group>
       <p>Opened at: {new Date(job.createdAt * 1000).toLocaleTimeString()}</p>
+      {job.closedAt && <p>Closed At: {new Date(job.closedAt * 1000).toLocaleTimeString()}</p>}
       <Group>
         <p>Caller Name: {job.callerName}</p>
         <p>Caller Phone: {job.callerPhone}</p>
