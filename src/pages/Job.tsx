@@ -1,6 +1,13 @@
 import { useParams } from 'react-router-dom';
 import { RequireAuth, useAuth } from '../hooks/useAuth';
-import { Button, Group, NativeSelect, TextInput } from '@mantine/core';
+import {
+  Button,
+  Card,
+  CloseButton,
+  Group,
+  NativeSelect,
+  TextInput,
+} from '@mantine/core';
 import { useState } from 'react';
 import { useJob, useResources } from '../hooks/useData';
 
@@ -67,6 +74,22 @@ const JobPage = () => {
     });
   };
 
+  const unAssignUnit = (assignmentId: string) => {
+    fetch('/api/v0/resources/assign', {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        assignmentId: assignmentId,
+      }),
+    }).then(() => {
+      mutateJob();
+      mutateResources();
+    });
+  };
+
   if (isLoading || !job) {
     return <RequireAuth>Loading..</RequireAuth>;
   }
@@ -82,14 +105,25 @@ const JobPage = () => {
       </Group>
       {job.closedAt == null && (
         <>
-          <p>
+          <Group>
             Assigned Resources:{' '}
             {resources &&
               resources
                 .filter((r) => r.assignment && r.assignment.jobId == job.id)
-                .map((r) => r.displayName)
-                .join(', ')}
-          </p>
+                .map((r) => {
+                  return (
+                    <Card p="xs" m="xs" withBorder>
+                      <Group gap="xs">
+                        {r.displayName}{' '}
+                        <CloseButton
+                          size="xs"
+                          onClick={() => unAssignUnit(r.assignment.id)}
+                        />
+                      </Group>
+                    </Card>
+                  );
+                })}
+          </Group>
           <Group>
             <NativeSelect
               id="newAssignmentSelect"
@@ -100,7 +134,16 @@ const JobPage = () => {
                   .map((r) => ({ label: r.displayName, value: r.id }))
               }
             />
-            <Button onClick={() => assignUnit()}>Assign Unit</Button>
+            <Button
+              disabled={
+                resources == undefined ||
+                resources.filter((r) => !r.assignment && r.inService).length ==
+                  0
+              }
+              onClick={() => assignUnit()}
+            >
+              Assign Unit
+            </Button>
           </Group>
         </>
       )}
