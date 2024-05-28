@@ -15,7 +15,7 @@ const fetcher = (...args: any[]) =>
     }
   });
 
-export const useResources = () => {
+const useResources = () => {
   const auth = useAuth();
 
   const {
@@ -49,7 +49,7 @@ export const useResources = () => {
   };
 };
 
-export const useJobs = () => {
+const useJobs = () => {
   const auth = useAuth();
 
   const {
@@ -83,7 +83,7 @@ export const useJobs = () => {
   };
 };
 
-export const useJob = (jobId: string) => {
+const useJob = (jobId: string) => {
   const auth = useAuth();
 
   const {

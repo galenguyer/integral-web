@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { RequireAuth } from '../hooks/useAuth';
 import { Button, Table } from '@mantine/core';
-import { useResources, useSystem } from '../hooks/useData';
+import { useSystem } from '../hooks/useData';
 import { IJob, IResource } from '../types';
 
 const JobTableRow = ({
@@ -46,7 +46,7 @@ const JobTableRow = ({
 const JobsPage = () => {
   const navigate = useNavigate();
 
-  const { useJobs } = useSystem();
+  const { useJobs, useResources } = useSystem();
   const { jobs } = useJobs();
   const { resources } = useResources();
 
