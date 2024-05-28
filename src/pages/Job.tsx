@@ -149,6 +149,7 @@ const JobPage = () => {
                   (r) =>
                     r.currentAssignment && r.currentAssignment.jobId == job.id,
                 )
+                .sort((a, b) => (a.displayName > b.displayName ? 1 : -1))
                 .map((r) => {
                   return (
                     <Card p="xs" m="xs" withBorder>
@@ -171,6 +172,7 @@ const JobPage = () => {
                 resources
                   .filter((r) => !r.currentAssignment && r.inService)
                   .map((r) => ({ label: r.displayName, value: r.id }))
+                  .sort((a, b) => (a.label > b.label ? 1 : -1))
               }
             />
             <Button

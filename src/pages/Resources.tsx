@@ -22,21 +22,23 @@ const ResourcesPage = () => {
 
   const rows =
     resources &&
-    resources.map((r) => (
-      <Table.Tr key={r.id}>
-        <Table.Td>{r.displayName}</Table.Td>
-        <Table.Td>
-          <Checkbox
-            checked={r.inService}
-            onChange={() => setInService(r.id, !r.inService)}
-          />
-        </Table.Td>
-        <Table.Td>
-          {r.currentAssignment ? 'On a Call' : 'Available for Assignment'}
-        </Table.Td>
-        <Table.Td>{r.comment}</Table.Td>
-      </Table.Tr>
-    ));
+    resources
+      .sort((a, b) => (a.displayName > b.displayName ? 1 : -1))
+      .map((r) => (
+        <Table.Tr key={r.id}>
+          <Table.Td>{r.displayName}</Table.Td>
+          <Table.Td>
+            <Checkbox
+              checked={r.inService}
+              onChange={() => setInService(r.id, !r.inService)}
+            />
+          </Table.Td>
+          <Table.Td>
+            {r.currentAssignment ? 'On a Call' : 'Available for Assignment'}
+          </Table.Td>
+          <Table.Td>{r.comment}</Table.Td>
+        </Table.Tr>
+      ));
 
   return (
     <RequireAuth>
