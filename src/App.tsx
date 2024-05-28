@@ -13,9 +13,6 @@ import JobPage from './pages/Job';
 import ResourcesPage from './pages/Resources';
 import NewResourcePage from './pages/NewResource';
 import DashboardPage from './pages/Dashboard';
-import ReconnectingEventSource from 'reconnecting-eventsource';
-import { useEffect } from 'react';
-import { useJobs } from './hooks/useData';
 
 function App() {
   const { brand, link } = useHeader();

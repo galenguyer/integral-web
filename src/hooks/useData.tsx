@@ -1,7 +1,7 @@
 import useSWR, { KeyedMutator } from 'swr';
 import { useAuth } from './useAuth';
 import { IJob, IResource } from '../types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ReconnectingEventSource from 'reconnecting-eventsource';
 
 const fetcher = (...args: any[]) =>
