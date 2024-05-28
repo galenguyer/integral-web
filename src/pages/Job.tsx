@@ -97,7 +97,7 @@ const JobPage = () => {
         const resourceName = resources.find(
           (r) => r.id == assignment.resourceId,
         )?.displayName;
-        let comments = [
+        let assignmentComments = [
           {
             id: assignment.id,
             createdAt: assignment.assignedAt,
@@ -107,15 +107,15 @@ const JobPage = () => {
           },
         ];
         if (assignment.removedAt) {
-          comments.push({
+          assignmentComments.push({
             id: assignment.id,
             createdAt: assignment.removedAt,
             createdBy: assignment.removedBy ?? '',
             jobId: assignment.jobId,
-            comment: `${resourceName} was removed by a dispatcher`,
+            comment: `${resourceName} was removed by ${job.closedAt && Math.abs(job.closedAt - assignment.removedAt) <= 1 ? 'job close' : 'a dispatcher'}`,
           });
         }
-        return comments;
+        return assignmentComments;
       })
       .flat(),
   );
