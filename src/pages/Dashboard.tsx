@@ -1,6 +1,6 @@
 import { RequireAuth } from '../hooks/useAuth';
 import { Card, Center, Group, SimpleGrid, Table } from '@mantine/core';
-import { useJobs, useResources } from '../hooks/useData';
+import { useSystem } from '../hooks/useData';
 import { IJob, IResource } from '../types';
 import SimpleLink from '../components/SimpleLink';
 
@@ -39,6 +39,7 @@ const JobTableRow = ({
 };
 
 const DashboardPage = () => {
+  const { useJobs, useResources } = useSystem();
   const { jobs } = useJobs();
   const { resources } = useResources();
 

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { RequireAuth } from '../hooks/useAuth';
 import { Button, Table } from '@mantine/core';
-import { useJobs, useResources } from '../hooks/useData';
+import { useResources, useSystem } from '../hooks/useData';
 import { IJob, IResource } from '../types';
 
 const JobTableRow = ({
@@ -46,6 +46,7 @@ const JobTableRow = ({
 const JobsPage = () => {
   const navigate = useNavigate();
 
+  const { useJobs } = useSystem();
   const { jobs } = useJobs();
   const { resources } = useResources();
 
@@ -53,7 +54,9 @@ const JobsPage = () => {
     jobs &&
     jobs
       .sort((a, b) => b.createdAt - a.createdAt)
-      .map((job) => <JobTableRow job={job} resources={resources} />);
+      .map((job) => (
+        <JobTableRow key={job.id} job={job} resources={resources} />
+      ));
 
   return (
     <RequireAuth>

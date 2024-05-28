@@ -9,7 +9,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useState } from 'react';
-import { useJob, useResources } from '../hooks/useData';
+import { useSystem } from '../hooks/useData';
 
 const JobPage = () => {
   const { jobId } = useParams();
@@ -17,7 +17,9 @@ const JobPage = () => {
   const [newComment, setNewComment] = useState('');
 
   //@ts-ignore
-  const { job, isLoading, mutateJob } = useJob(jobId);
+  const { useJob, useResources } = useSystem();
+  useSystem().jobId = jobId ?? '';
+  const { job, isLoading, mutateJob } = useJob(jobId ?? '');
   const { resources, mutateResources } = useResources();
 
   const submitComment = () => {

@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { RequireAuth, useAuth } from '../hooks/useAuth';
 import { Button, Checkbox, Space, Table } from '@mantine/core';
-import { useResources } from '../hooks/useData';
+import { useSystem } from '../hooks/useData';
 
 const ResourcesPage = () => {
   const auth = useAuth();
   const navigate = useNavigate();
 
+  const { useResources } = useSystem();
   const { resources, mutateResources } = useResources();
 
   const setInService = (id: string, inService: boolean) => {

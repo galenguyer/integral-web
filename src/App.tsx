@@ -22,25 +22,6 @@ function App() {
   const auth = useAuth();
   const mobile = isMobile();
 
-  const { mutateJobs } = useJobs();
-  useEffect(() => {
-    const evtSource = new ReconnectingEventSource(
-      `/api/v0/stream?token=${auth.token}`,
-    );
-
-    evtSource.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      console.log(data);
-      if (data.job !== undefined) {
-        mutateJobs();
-      }
-    };
-
-    return () => {
-      evtSource.close();
-    };
-  }, []);
-
   return (
     <>
       <AppShell
