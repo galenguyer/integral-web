@@ -9,6 +9,7 @@ export interface IJob {
   closedAt: number | undefined;
   closedBy: string | undefined;
   comments: IComment[];
+  assignments: IAssignment[];
 }
 
 export interface IComment {

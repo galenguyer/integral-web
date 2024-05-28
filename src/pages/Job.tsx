@@ -87,22 +87,37 @@ const JobPage = () => {
     });
   };
 
-  if (isLoading || !job) {
+  if (isLoading || !job || !resources) {
     return <RequireAuth>Loading..</RequireAuth>;
   }
 
   const comments = job.comments.concat(
-    resources
-      .filter((r) => r.currentAssignment && r.currentAssignment.jobId == job.id)
-      .map((r) => {
-        return {
-          id: r.id,
-          createdAt: r.currentAssignment.assignedAt,
-          createdBy: r.currentAssignment.assignedBy,
-          jobId: r.currentAssignment.jobId,
-          comment: `Assigned ${r.displayName}`,
-        };
-      }),
+    job.assignments
+      .map((assignment) => {
+        const resourceName = resources.find(
+          (r) => r.id == assignment.resourceId,
+        )?.displayName;
+        let comments = [
+          {
+            id: assignment.id,
+            createdAt: assignment.assignedAt,
+            createdBy: assignment.assignedBy,
+            jobId: assignment.jobId,
+            comment: `${resourceName} was assigned by a dispatcher`,
+          },
+        ];
+        if (assignment.removedAt) {
+          comments.push({
+            id: assignment.id,
+            createdAt: assignment.removedAt,
+            createdBy: assignment.removedBy ?? '',
+            jobId: assignment.jobId,
+            comment: `${resourceName} was removed by a dispatcher`,
+          });
+        }
+        return comments;
+      })
+      .flat(),
   );
 
   return (
