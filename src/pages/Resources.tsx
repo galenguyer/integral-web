@@ -34,7 +34,7 @@ const ResourcesPage = () => {
             />
           </Table.Td>
           <Table.Td>
-            {r.currentAssignment ? 'On a Call' : 'Available for Assignment'}
+            {r.currentAssignment ? 'On a Call' : (r.inService ? 'Available for Assignment' : 'Out of Service')}
           </Table.Td>
           <Table.Td>{r.comment}</Table.Td>
         </Table.Tr>
