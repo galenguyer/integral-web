@@ -61,16 +61,21 @@ const DashboardPage = () => {
       .map((job) => <JobTableRow job={job} resources={resources} />);
   const resourceRows =
     resources &&
-    resources.map((r) => (
-      <Table.Tr key={r.id}>
-        <Table.Td>{r.displayName}</Table.Td>
-        <Table.Td>{r.inService ? 'In Service' : 'Out of Service'}</Table.Td>
-        <Table.Td>
-          {r.currentAssignment ? 'On a Call' : 'Available for Assignment'}
-        </Table.Td>
-        <Table.Td>{r.comment}</Table.Td>
-      </Table.Tr>
-    ));
+    resources
+      .sort((a, b) => (a.displayName > b.displayName ? 1 : -1))
+      .map((r) => (
+        <Table.Tr key={r.id}>
+          <Table.Td>{r.displayName}</Table.Td>
+          <Table.Td>
+            {r.currentAssignment
+              ? 'On a Call'
+              : r.inService
+                ? 'Available for Assignment'
+                : 'Out of Service'}
+          </Table.Td>
+          <Table.Td>{r.comment}</Table.Td>
+        </Table.Tr>
+      ));
 
   return (
     <RequireAuth>
@@ -125,8 +130,7 @@ const DashboardPage = () => {
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Unit Name</Table.Th>
-                <Table.Th>In Service</Table.Th>
-                <Table.Th>Call</Table.Th>
+                <Table.Th>Status</Table.Th>
                 <Table.Th>Comments</Table.Th>
               </Table.Tr>
             </Table.Thead>
