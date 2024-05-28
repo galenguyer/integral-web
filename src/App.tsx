@@ -13,11 +13,33 @@ import JobPage from './pages/Job';
 import ResourcesPage from './pages/Resources';
 import NewResourcePage from './pages/NewResource';
 import DashboardPage from './pages/Dashboard';
+import ReconnectingEventSource from 'reconnecting-eventsource';
+import { useEffect } from 'react';
+import { useJobs } from './hooks/useData';
 
 function App() {
   const { brand, link } = useHeader();
   const auth = useAuth();
   const mobile = isMobile();
+
+  const { mutateJobs } = useJobs();
+  useEffect(() => {
+    const evtSource = new ReconnectingEventSource(
+      `/api/v0/stream?token=${auth.token}`,
+    );
+
+    evtSource.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      console.log(data);
+      if (data.job !== undefined) {
+        mutateJobs();
+      }
+    };
+
+    return () => {
+      evtSource.close();
+    };
+  }, []);
 
   return (
     <>
