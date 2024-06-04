@@ -59,7 +59,7 @@ const DashboardPage = () => {
     openJobs &&
     openJobs
       .sort((a, b) => b.createdAt - a.createdAt)
-      .map((job) => <JobTableRow job={job} resources={resources} />);
+      .map((job) => <JobTableRow key={job.id} job={job} resources={resources} />);
   const resourceRows =
     resources &&
     resources
@@ -69,7 +69,7 @@ const DashboardPage = () => {
           <Table.Td>{r.displayName}</Table.Td>
           <Table.Td>
             {r.currentAssignment
-              ? `On Call: ${jobs.find((job) => job.id == r.currentAssignment.jobId)?.synopsis}`
+              ? `On Call: ${jobs && jobs.find((job) => job.id == r.currentAssignment.jobId)?.synopsis}`
               : r.inService
                 ? 'Available for Assignment'
                 : 'Out of Service'}
