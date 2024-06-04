@@ -7,6 +7,7 @@ import {
   Container,
   Group,
   Menu,
+  Modal,
   Stack,
   Text,
   TextInput,
@@ -18,6 +19,7 @@ import { useSystem } from '../hooks/useSystem';
 import { IJob, IResource } from '../types';
 import { IconSquareRoundedMinus } from '@tabler/icons-react';
 import { callDate } from './Jobs';
+import { useDisclosure } from '@mantine/hooks';
 
 const buildComments = (job: IJob, resources: IResource[]) => {
   return job.comments
@@ -70,6 +72,9 @@ const JobPage = () => {
     combobox.selectFirstOption();
   }, [newAssignmentId]);
 
+  const [closeModalOpened, { open: openCloseModal, close: closeCloseModal }] =
+    useDisclosure(false);
+
   const submitComment = (event: any) => {
     event.preventDefault();
 
@@ -101,6 +106,7 @@ const JobPage = () => {
       },
     }).then(() => {
       setNewComment('');
+      closeCloseModal();
       mutateJob();
       mutateResources();
     });
@@ -160,18 +166,37 @@ const JobPage = () => {
 
   return (
     <RequireAuth>
+      <Modal
+        size="lg"
+        centered
+        opened={closeModalOpened}
+        onClose={closeCloseModal}
+        title="Confirm"
+      >
+        <Text span>You are about to close this job. </Text>
+        <Text span c="red">
+          This will prevent any further changes, unassign all units, and cannot
+          be undone.
+        </Text>
+        <Group pt="lg">
+          <Button color="red" onClick={() => closeJob()}>
+            Confirm and Close
+          </Button>
+          <Button onClick={() => closeCloseModal()}>Cancel</Button>
+        </Group>
+      </Modal>
       <Container size="sm">
         <Group justify="space-between">
           <h2>{job.synopsis}</h2>
           {job.closedAt == null && (
-            <Button color="red" onClick={() => closeJob()}>
+            <Button color="red" onClick={() => openCloseModal()}>
               Close Job
             </Button>
           )}
         </Group>
 
         <p>Opened at: {callDate(job.createdAt)}</p>
-        {job.closedAt && <p>Closed At: {callDate(job.createdAt)}</p>}
+        {job.closedAt && <p>Closed At: {callDate(job.closedAt)}</p>}
 
         <Stack>
           <Text>Caller Name: {job.callerName}</Text>
@@ -181,7 +206,7 @@ const JobPage = () => {
 
         {job.closedAt == null && (
           <>
-            <Group>
+            <Group mt="md">
               Assigned Resources:{' '}
               {resources
                 .filter(
