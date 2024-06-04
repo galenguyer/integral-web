@@ -1,8 +1,21 @@
-import { Button, Center, PasswordInput, Stack, TextInput } from '@mantine/core';
+import {
+  Button,
+  Center,
+  Container,
+  PasswordInput,
+  TextInput,
+} from '@mantine/core';
 import { useAuth } from '../hooks/useAuth';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useFeatures } from '../hooks/useFeatures';
+import {
+  hasLength,
+  isEmail,
+  isNotEmpty,
+  matchesField,
+  useForm,
+} from '@mantine/form';
 
 const SignupPage = () => {
   let auth = useAuth();
@@ -10,13 +23,6 @@ const SignupPage = () => {
   let location = useLocation();
   let features = useFeatures();
 
-  const [email, setEmail] = useState('');
-  const [displayName, setDisplayName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [emailValid, setEmailValid] = useState(true);
-  const [passwordValid, setPasswordValid] = useState(true);
-  const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [_error, setError] = useState(false);
 
   let from = location.state?.from?.pathname || '/';
@@ -27,47 +33,37 @@ const SignupPage = () => {
     }
   }, [auth, from, navigate]);
 
-  const handleSubmit = () => {
-    const re = /.{1,128}@.{1,128}\..{1,128}/i;
-    if (!re.test(email)) {
-      setEmailValid(false);
-    } else {
-      setEmailValid(true);
-    }
-    if (password.length < 12) {
-      setPasswordValid(false);
-    } else {
-      setPasswordValid(true);
-    }
-    if (password !== confirmPassword) {
-      setPasswordsMatch(false);
-    } else {
-      setPasswordsMatch(true);
-    }
+  const form = useForm({
+    mode: 'uncontrolled',
+    validate: {
+      email: isEmail('Not a valid email'),
+      displayName: isNotEmpty('Display Name cannot be empty'),
+      password: hasLength(
+        { min: 12 },
+        'Password must be at least 12 characters',
+      ),
+      confirmPassword: matchesField('password', 'Passwords must match'),
+    },
+  });
 
-    if (emailValid && passwordValid && passwordsMatch) {
-      fetch('/api/v0/users/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-          displayName: displayName,
-        }),
-      }).then((res) => {
-        if (res.status === 200) {
-          res.json().then((data) => {
-            auth.signin(data.token, () => {
-              navigate(from, { replace: true });
-            });
+  const handleSubmit = (values: any) => {
+    fetch('/api/v0/users/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    }).then((res) => {
+      if (res.status === 200) {
+        res.json().then((data) => {
+          auth.signin(data.token, () => {
+            navigate(from, { replace: true });
           });
-        } else {
-          setError(true);
-        }
-      });
-    }
+        });
+      } else {
+        setError(true);
+      }
+    });
   };
 
   if (!features || !features.signup) {
@@ -82,50 +78,46 @@ const SignupPage = () => {
   }
 
   return (
-    <Center>
-      <Stack miw="400">
-        <h1>Log In</h1>
+    <Container maw="600">
+      <h1>Sign Up</h1>
+      <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
         <TextInput
+          withAsterisk
           label="Email"
-          value={email}
-          error={emailValid ? undefined : 'Email appears to be invalid'}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
+          placeholder="your@email.com"
+          key={form.key('email')}
+          {...form.getInputProps('email')}
         />
         <TextInput
+          mt="sm"
+          withAsterisk
           label="Display Name"
-          value={displayName}
-          onChange={(e) => {
-            setDisplayName(e.target.value);
-          }}
+          key={form.key('displayName')}
+          {...form.getInputProps('displayName')}
         />
         <PasswordInput
+          mt="sm"
+          withAsterisk
           label="Password"
-          value={password}
-          error={
-            passwordValid
-              ? undefined
-              : 'Password must be 12 characters or longer'
-          }
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
+          key={form.key('password')}
+          {...form.getInputProps('password')}
         />
         <PasswordInput
+          mt="sm"
+          withAsterisk
           label="Confirm Password"
-          value={confirmPassword}
-          error={passwordsMatch ? undefined : 'Passwords do not match'}
-          onChange={(e) => {
-            setConfirmPassword(e.target.value);
-          }}
+          key={form.key('confirmPassword')}
+          {...form.getInputProps('confirmPassword')}
         />
-        <Button onClick={() => handleSubmit()}>Submit</Button>
-        <p>
-          If you have an account, you can <Link to="/login">sign in.</Link>
-        </p>
-      </Stack>
-    </Center>
+
+        <Button mt="lg" fullWidth type="submit">
+          Sign Up
+        </Button>
+      </form>
+      <p>
+        If you have an account, you can <Link to="/login">sign in.</Link>
+      </p>
+    </Container>
   );
 };
 
