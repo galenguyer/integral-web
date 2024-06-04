@@ -10,6 +10,38 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import { useSystem } from '../hooks/useSystem';
+import { IJob, IResource } from '../types';
+
+const buildComments = (job: IJob, resources: IResource[]) => {
+  return job.comments.concat(
+    job.assignments
+      .map((assignment) => {
+        const resourceName = resources.find(
+          (r) => r.id == assignment.resourceId,
+        )?.displayName;
+        let assignmentComments = [
+          {
+            id: assignment.id,
+            createdAt: assignment.assignedAt,
+            createdBy: assignment.assignedBy,
+            jobId: assignment.jobId,
+            comment: `${resourceName} was assigned by a dispatcher`,
+          },
+        ];
+        if (assignment.removedAt) {
+          assignmentComments.push({
+            id: assignment.id,
+            createdAt: assignment.removedAt,
+            createdBy: assignment.removedBy ?? '',
+            jobId: assignment.jobId,
+            comment: `${resourceName} was removed by ${job.closedAt && Math.abs(job.closedAt - assignment.removedAt) <= 1 ? 'job close' : 'a dispatcher'}`,
+          });
+        }
+        return assignmentComments;
+      })
+      .flat(),
+  );
+};
 
 const JobPage = () => {
   const { jobId } = useParams();
@@ -52,6 +84,7 @@ const JobPage = () => {
     }).then(() => {
       setNewComment('');
       mutateJob();
+      mutateResources();
     });
   };
 
@@ -93,34 +126,7 @@ const JobPage = () => {
     return <RequireAuth>Loading..</RequireAuth>;
   }
 
-  const comments = job.comments.concat(
-    job.assignments
-      .map((assignment) => {
-        const resourceName = resources.find(
-          (r) => r.id == assignment.resourceId,
-        )?.displayName;
-        let assignmentComments = [
-          {
-            id: assignment.id,
-            createdAt: assignment.assignedAt,
-            createdBy: assignment.assignedBy,
-            jobId: assignment.jobId,
-            comment: `${resourceName} was assigned by a dispatcher`,
-          },
-        ];
-        if (assignment.removedAt) {
-          assignmentComments.push({
-            id: assignment.id,
-            createdAt: assignment.removedAt,
-            createdBy: assignment.removedBy ?? '',
-            jobId: assignment.jobId,
-            comment: `${resourceName} was removed by ${job.closedAt && Math.abs(job.closedAt - assignment.removedAt) <= 1 ? 'job close' : 'a dispatcher'}`,
-          });
-        }
-        return assignmentComments;
-      })
-      .flat(),
-  );
+  const comments = buildComments(job, resources);
 
   return (
     <RequireAuth>
