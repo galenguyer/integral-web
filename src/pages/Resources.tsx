@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { RequireAuth, useAuth } from '../hooks/useAuth';
 import { Button, Checkbox, Space, Table } from '@mantine/core';
-import { useSystem } from '../hooks/useData';
+import { useSystem } from '../hooks/useSystem';
 
 const ResourcesPage = () => {
   const auth = useAuth();

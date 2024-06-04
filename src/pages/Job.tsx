@@ -9,7 +9,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useState } from 'react';
-import { useSystem } from '../hooks/useData';
+import { useSystem } from '../hooks/useSystem';
 
 const JobPage = () => {
   const { jobId } = useParams();

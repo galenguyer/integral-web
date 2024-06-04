@@ -1,6 +1,6 @@
 import { RequireAuth } from '../hooks/useAuth';
 import { Card, Center, Group, SimpleGrid, Table } from '@mantine/core';
-import { useSystem } from '../hooks/useData';
+import { useSystem } from '../hooks/useSystem';
 import { IJob, IResource } from '../types';
 import SimpleLink from '../components/SimpleLink';
 import { useNavigate } from 'react-router-dom';

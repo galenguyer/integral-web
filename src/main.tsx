@@ -8,7 +8,7 @@ import '@mantine/core/styles.css';
 import { HeaderProvider } from './hooks/useHeader.tsx';
 import { BrowserRouter } from 'react-router-dom';
 import { FeaturesProvider } from './hooks/useFeatures.tsx';
-import { SystemProvider } from './hooks/useData.tsx';
+import { SystemProvider } from './hooks/useSystem.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
