@@ -54,6 +54,7 @@ const JobsPage = () => {
     jobs &&
     jobs
       .sort((a, b) => b.createdAt - a.createdAt)
+      .sort((a, b) => (a.closedAt ? 1 : 0) - (b.closedAt ? 1 : 0))
       .map((job) => (
         <JobTableRow key={job.id} job={job} resources={resources} />
       ));

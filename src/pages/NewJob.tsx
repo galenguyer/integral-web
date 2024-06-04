@@ -12,9 +12,10 @@ const NewJobPage = () => {
     console.log(values);
     const payload: any = {
       ...values,
-      comments: [values.comments].map((s: string) => s.trim())
+      comments: [values.comments]
+        .map((s: string) => s.trim())
         .filter((s) => s != ''),
-    }
+    };
     fetch('/api/v0/jobs', {
       method: 'POST',
       headers: {
@@ -38,8 +39,8 @@ const NewJobPage = () => {
     },
     validate: {
       synopsis: isNotEmpty('Synopsis cannot be empty'),
-      location: isNotEmpty('Location cannot be empty')
-    }
+      location: isNotEmpty('Location cannot be empty'),
+    },
   });
 
   return (
@@ -53,14 +54,15 @@ const NewJobPage = () => {
           key={form.key('synopsis')}
           {...form.getInputProps('synopsis')}
         />
-        <TextInput mt='sm'
+        <TextInput
+          mt="sm"
           withAsterisk
           label="Location"
           description="Location of the event"
           key={form.key('location')}
           {...form.getInputProps('location')}
         />
-        <Group grow mt='sm' gap="xl">
+        <Group grow mt="sm" gap="xl">
           <TextInput
             label="Caller Name"
             key={form.key('callerName')}
@@ -73,13 +75,15 @@ const NewJobPage = () => {
           />
         </Group>
         <TextInput
-          mt='sm'
+          mt="sm"
           label="Comments"
           description="Any additional information"
           key={form.key('comments')}
           {...form.getInputProps('comments')}
         />
-        <Button mt='lg' fullWidth type="submit">Submit</Button>
+        <Button mt="lg" fullWidth type="submit">
+          Submit
+        </Button>
       </form>
     </RequireAuth>
   );
