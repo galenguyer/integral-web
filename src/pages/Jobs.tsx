@@ -31,7 +31,11 @@ const JobTableRow = ({
   }[jobStatus];
 
   return (
-    <Table.Tr style={{ backgroundColor: backgroundColor }} key={job.id}>
+    <Table.Tr
+      onDoubleClick={() => navigate(`/jobs/${job.id}`)}
+      style={{ backgroundColor: backgroundColor }}
+      key={job.id}
+    >
       <Table.Td>{job.synopsis}</Table.Td>
       <Table.Td>{job.location}</Table.Td>
       <Table.Td>{new Date(job.createdAt * 1000).toLocaleTimeString()}</Table.Td>

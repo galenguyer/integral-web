@@ -3,6 +3,7 @@ import { Card, Center, Group, SimpleGrid, Table } from '@mantine/core';
 import { useSystem } from '../hooks/useData';
 import { IJob, IResource } from '../types';
 import SimpleLink from '../components/SimpleLink';
+import { useNavigate } from 'react-router-dom';
 
 const JobTableRow = ({
   job,
@@ -11,6 +12,8 @@ const JobTableRow = ({
   job: IJob;
   resources: IResource[];
 }) => {
+  const navigate = useNavigate();
+
   const assignedResources =
     resources &&
     resources
@@ -29,7 +32,11 @@ const JobTableRow = ({
   }[jobStatus];
 
   return (
-    <Table.Tr style={{ backgroundColor: backgroundColor }} key={job.id}>
+    <Table.Tr
+      onDoubleClick={() => navigate(`/jobs/${job.id}`)}
+      style={{ backgroundColor: backgroundColor }}
+      key={job.id}
+    >
       <Table.Td>{job.synopsis}</Table.Td>
       <Table.Td>{job.location}</Table.Td>
       <Table.Td>{new Date(job.createdAt * 1000).toLocaleTimeString()}</Table.Td>
