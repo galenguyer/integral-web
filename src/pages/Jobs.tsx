@@ -4,6 +4,24 @@ import { Button, Table } from '@mantine/core';
 import { useSystem } from '../hooks/useSystem';
 import { IJob, IResource } from '../types';
 
+const isToday = (date: Date) => {
+  const today = new Date();
+  return (
+    date.getDate() == today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+};
+
+export const callDate = (date: number) => {
+  const cd = new Date(date * 1000);
+  if (isToday(cd)) {
+    return cd.toLocaleTimeString();
+  } else {
+    return cd.toLocaleString().replace(',', '');
+  }
+};
+
 const JobTableRow = ({
   job,
   resources,
@@ -38,7 +56,7 @@ const JobTableRow = ({
     >
       <Table.Td>{job.synopsis}</Table.Td>
       <Table.Td>{job.location}</Table.Td>
-      <Table.Td>{new Date(job.createdAt * 1000).toLocaleTimeString()}</Table.Td>
+      <Table.Td>{callDate(job.createdAt)}</Table.Td>
       <Table.Td>{jobStatus}</Table.Td>
       <Table.Td>
         <Button onClick={() => navigate(`/jobs/${job.id}`)}>Details</Button>

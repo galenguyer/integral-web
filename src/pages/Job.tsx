@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 import { useSystem } from '../hooks/useSystem';
 import { IJob, IResource } from '../types';
 import { IconSquareRoundedMinus } from '@tabler/icons-react';
+import { callDate } from './Jobs';
 
 const buildComments = (job: IJob, resources: IResource[]) => {
   return job.comments
@@ -169,10 +170,8 @@ const JobPage = () => {
           )}
         </Group>
 
-        <p>Opened at: {new Date(job.createdAt * 1000).toLocaleTimeString()}</p>
-        {job.closedAt && (
-          <p>Closed At: {new Date(job.closedAt * 1000).toLocaleTimeString()}</p>
-        )}
+        <p>Opened at: {callDate(job.createdAt)}</p>
+        {job.closedAt && <p>Closed At: {callDate(job.createdAt)}</p>}
 
         <Stack>
           <Text>Caller Name: {job.callerName}</Text>
@@ -278,8 +277,7 @@ const JobPage = () => {
         {comments.map((comment: any) => {
           return (
             <p style={{ textWrap: 'wrap', wordWrap: 'break-word' }}>
-              {new Date(comment.createdAt * 1000).toLocaleTimeString()} -{' '}
-              {comment.comment}
+              {callDate(comment.createdAt)} - {comment.comment}
             </p>
           );
         })}
