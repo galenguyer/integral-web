@@ -58,7 +58,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Container maw={600}>
+    <Container size="xs">
       <h1>Log In</h1>
       {error && (
         <Alert

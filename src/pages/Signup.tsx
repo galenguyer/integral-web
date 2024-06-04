@@ -78,7 +78,7 @@ const SignupPage = () => {
   }
 
   return (
-    <Container maw="600">
+    <Container size="xs">
       <h1>Sign Up</h1>
       <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
         <TextInput

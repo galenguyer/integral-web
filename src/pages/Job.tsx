@@ -4,13 +4,19 @@ import {
   Button,
   Card,
   CloseButton,
+  Container,
   Group,
+  Menu,
   NativeSelect,
+  Stack,
+  Text,
   TextInput,
+  rem,
 } from '@mantine/core';
 import { useState } from 'react';
 import { useSystem } from '../hooks/useSystem';
 import { IJob, IResource } from '../types';
+import { IconLogout, IconSquareRoundedMinus } from '@tabler/icons-react';
 
 const buildComments = (job: IJob, resources: IResource[]) => {
   return job.comments.concat(
@@ -39,7 +45,8 @@ const buildComments = (job: IJob, resources: IResource[]) => {
         }
         return assignmentComments;
       })
-      .flat(),
+      .flat()
+      .sort((a: any, b: any) => b.createdAt - a.createdAt),
   );
 };
 
@@ -123,36 +130,39 @@ const JobPage = () => {
   };
 
   if (isLoading || !job || !resources) {
-    return <RequireAuth>Loading..</RequireAuth>;
+    return <Container> </Container>;
   }
 
   const comments = buildComments(job, resources);
 
   return (
     <RequireAuth>
-      <Group justify="space-between">
-        <h2>{job.synopsis}</h2>
-        {job.closedAt == null && (
-          <Button color="red" onClick={() => closeJob()}>
-            Close Job
-          </Button>
+      <Container size="sm">
+        <Group justify="space-between">
+          <h2>{job.synopsis}</h2>
+          {job.closedAt == null && (
+            <Button color="red" onClick={() => closeJob()}>
+              Close Job
+            </Button>
+          )}
+        </Group>
+
+        <p>Opened at: {new Date(job.createdAt * 1000).toLocaleTimeString()}</p>
+        {job.closedAt && (
+          <p>Closed At: {new Date(job.closedAt * 1000).toLocaleTimeString()}</p>
         )}
-      </Group>
-      <p>Opened at: {new Date(job.createdAt * 1000).toLocaleTimeString()}</p>
-      {job.closedAt && (
-        <p>Closed At: {new Date(job.closedAt * 1000).toLocaleTimeString()}</p>
-      )}
-      <Group>
-        <p>Caller Name: {job.callerName}</p>
-        <p>Caller Phone: {job.callerPhone}</p>
-        <p>Location: {job.location}</p>
-      </Group>
-      {job.closedAt == null && (
-        <>
-          <Group>
-            Assigned Resources:{' '}
-            {resources &&
-              resources
+
+        <Stack>
+          <Text>Caller Name: {job.callerName}</Text>
+          <Text>Caller Phone: {job.callerPhone}</Text>
+          <Text>Location: {job.location}</Text>
+        </Stack>
+
+        {job.closedAt == null && (
+          <>
+            <Group>
+              Assigned Resources:{' '}
+              {resources
                 .filter(
                   (r) =>
                     r.currentAssignment && r.currentAssignment.jobId == job.id,
@@ -160,55 +170,58 @@ const JobPage = () => {
                 .sort((a, b) => (a.displayName > b.displayName ? 1 : -1))
                 .map((r) => {
                   return (
-                    <Card p="xs" m="xs" withBorder>
-                      <Group gap="xs">
-                        {r.displayName}{' '}
-                        <CloseButton
-                          size="xs"
+                    <Menu offset={2}>
+                      <Menu.Target>
+                        <Button variant="default">{r.displayName}</Button>
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        <Menu.Item
+                          color="red"
+                          leftSection={
+                            <IconSquareRoundedMinus
+                              style={{ width: rem(14), height: rem(14) }}
+                            />
+                          }
                           onClick={() => unAssignUnit(r.currentAssignment.id)}
-                        />
-                      </Group>
-                    </Card>
+                        >
+                          Remove Unit
+                        </Menu.Item>
+                      </Menu.Dropdown>
+                    </Menu>
                   );
                 })}
-          </Group>
-          <Group>
-            <NativeSelect
-              id="newAssignmentSelect"
-              data={
-                resources &&
-                resources
+            </Group>
+            <Group>
+              <NativeSelect
+                id="newAssignmentSelect"
+                data={resources
                   .filter((r) => !r.currentAssignment && r.inService)
                   .map((r) => ({ label: r.displayName, value: r.id }))
-                  .sort((a, b) => (a.label > b.label ? 1 : -1))
-              }
-            />
-            <Button
-              disabled={
-                resources == undefined ||
-                resources.filter((r) => !r.currentAssignment && r.inService)
-                  .length == 0
-              }
-              onClick={() => assignUnit()}
-            >
-              Assign Unit
-            </Button>
+                  .sort((a, b) => (a.label > b.label ? 1 : -1))}
+              />
+              <Button
+                disabled={
+                  resources.filter((r) => !r.currentAssignment && r.inService)
+                    .length == 0
+                }
+                onClick={() => assignUnit()}
+              >
+                Assign Unit
+              </Button>
+            </Group>
+          </>
+        )}
+        {job.closedAt == null && (
+          <Group pt="lg">
+            <TextInput
+              placeholder="New Comment"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            ></TextInput>
+            <Button onClick={() => submitComment()}>Add Comment</Button>
           </Group>
-        </>
-      )}
-      {job.closedAt == null && (
-        <Group pt="lg">
-          <TextInput
-            placeholder="New Comment"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-          ></TextInput>
-          <Button onClick={() => submitComment()}>Add Comment</Button>
-        </Group>
-      )}
-      {comments
-        .sort((a: any, b: any) => b.createdAt - a.createdAt)
-        .map((comment: any) => {
+        )}
+        {comments.map((comment: any) => {
           return (
             <p>
               {new Date(comment.createdAt * 1000).toLocaleTimeString()} -{' '}
@@ -216,6 +229,7 @@ const JobPage = () => {
             </p>
           );
         })}
+      </Container>
     </RequireAuth>
   );
 };
