@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CloseButton,
+  Combobox,
   Container,
   Group,
   Menu,
@@ -12,8 +13,9 @@ import {
   Text,
   TextInput,
   rem,
+  useCombobox,
 } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSystem } from '../hooks/useSystem';
 import { IJob, IResource } from '../types';
 import { IconLogout, IconSquareRoundedMinus } from '@tabler/icons-react';
@@ -61,6 +63,9 @@ const JobPage = () => {
   const { job, isLoading, mutateJob } = useJob(jobId ?? '');
   const { resources, mutateResources } = useResources();
 
+  const combobox = useCombobox();
+  const [newAssignmentId, setNewAssignmentId] = useState('');
+
   const submitComment = () => {
     if (newComment == '') {
       return;
@@ -95,7 +100,7 @@ const JobPage = () => {
     });
   };
 
-  const assignUnit = () => {
+  const assignUnit = (resourceId: string) => {
     fetch('/api/v0/assignments', {
       method: 'POST',
       headers: {
@@ -104,8 +109,7 @@ const JobPage = () => {
       },
       body: JSON.stringify({
         jobId: jobId,
-        //@ts-ignore
-        resourceId: document.getElementById('newAssignmentSelect').value,
+        resourceId,
       }),
     }).then(() => {
       mutateJob();
@@ -134,6 +138,23 @@ const JobPage = () => {
   }
 
   const comments = buildComments(job, resources);
+
+  const filteredNewAssignmentOptions = resources
+    .filter((r) => !r.currentAssignment && r.inService)
+    .filter((r) =>
+      r.displayName
+        .toLowerCase()
+        .includes(newAssignmentId.toLowerCase().trim()),
+    );
+  const newAssignmentOptions = filteredNewAssignmentOptions.map((r) => (
+    <Combobox.Option value={r.id} key={r.id}>
+      {r.displayName}
+    </Combobox.Option>
+  ));
+  useEffect(() => {
+    // we need to wait for options to render before we can select first one
+    combobox.selectFirstOption();
+  }, [newAssignmentId]);
 
   return (
     <RequireAuth>
@@ -190,24 +211,51 @@ const JobPage = () => {
                     </Menu>
                   );
                 })}
-            </Group>
-            <Group>
-              <NativeSelect
-                id="newAssignmentSelect"
-                data={resources
-                  .filter((r) => !r.currentAssignment && r.inService)
-                  .map((r) => ({ label: r.displayName, value: r.id }))
-                  .sort((a, b) => (a.label > b.label ? 1 : -1))}
-              />
-              <Button
-                disabled={
-                  resources.filter((r) => !r.currentAssignment && r.inService)
-                    .length == 0
-                }
-                onClick={() => assignUnit()}
+              <Combobox
+                onOptionSubmit={(optionValue) => {
+                  assignUnit(optionValue);
+                  setNewAssignmentId('');
+                  combobox.closeDropdown();
+                }}
+                store={combobox}
               >
-                Assign Unit
-              </Button>
+                <Combobox.Target>
+                  <TextInput
+                    placeholder="Assign Unit"
+                    value={newAssignmentId}
+                    onChange={(event) => {
+                      setNewAssignmentId(event.currentTarget.value);
+                      combobox.openDropdown();
+                      combobox.updateSelectedOptionIndex();
+                    }}
+                    onClick={() => combobox.openDropdown()}
+                    onFocus={() => combobox.openDropdown()}
+                    onBlur={() => {
+                      combobox.closeDropdown();
+                    }}
+                    rightSection={
+                      newAssignmentId !== '' && (
+                        <CloseButton
+                          size="sm"
+                          onMouseDown={(event) => event.preventDefault()}
+                          onClick={() => setNewAssignmentId('')}
+                          aria-label="Clear value"
+                        />
+                      )
+                    }
+                  />
+                </Combobox.Target>
+
+                <Combobox.Dropdown>
+                  <Combobox.Options>
+                    {newAssignmentOptions.length === 0 ? (
+                      <Combobox.Empty>No Units Found</Combobox.Empty>
+                    ) : (
+                      newAssignmentOptions
+                    )}
+                  </Combobox.Options>
+                </Combobox.Dropdown>
+              </Combobox>
             </Group>
           </>
         )}
