@@ -8,8 +8,10 @@ const fetcher = (...args: any[]) =>
   // @ts-ignore
   fetch(...args).then((res) => {
     if (res.status == 401) {
-      localStorage.removeItem('token');
-      window.location.reload();
+      if (localStorage.getItem('token')) {
+        localStorage.removeItem('token');
+        window.location.reload();
+      }
     } else {
       return res.json();
     }
@@ -153,11 +155,9 @@ export const SystemProvider = ({ children }: { children: any }) => {
     const evtSource = new ReconnectingEventSource(
       `/api/v0/stream?token=${localStorage.getItem('token')}`,
     );
-    console.log('jobId', value.jobId);
 
     evtSource.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      console.log(data);
       if (data.job !== undefined) {
         mutateJobs();
         if (value.jobId) {
