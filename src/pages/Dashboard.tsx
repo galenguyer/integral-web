@@ -69,7 +69,7 @@ const DashboardPage = () => {
           <Table.Td>{r.displayName}</Table.Td>
           <Table.Td>
             {r.currentAssignment
-              ? 'On a Call'
+              ? `On Call: ${jobs.find((job) => job.id == r.currentAssignment.jobId)?.synopsis}`
               : r.inService
                 ? 'Available for Assignment'
                 : 'Out of Service'}

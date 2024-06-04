@@ -7,8 +7,9 @@ const ResourcesPage = () => {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  const { useResources } = useSystem();
+  const { useResources, useJobs } = useSystem();
   const { resources, mutateResources } = useResources();
+  const { jobs } = useJobs();
 
   const setInService = (id: string, inService: boolean) => {
     fetch('/api/v0/resources/inservice', {
@@ -36,7 +37,7 @@ const ResourcesPage = () => {
           </Table.Td>
           <Table.Td>
             {r.currentAssignment
-              ? 'On a Call'
+              ? `On Call: ${jobs.find((job) => job.id == r.currentAssignment.jobId)?.synopsis}`
               : r.inService
                 ? 'Available for Assignment'
                 : 'Out of Service'}
