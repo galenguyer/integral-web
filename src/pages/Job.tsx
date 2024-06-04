@@ -156,7 +156,8 @@ const JobPage = () => {
     .filter((r) =>
       r.displayName
         .toLowerCase()
-        .includes(newAssignmentId.toLowerCase().trim()),
+        .replace(' ', '')
+        .includes(newAssignmentId.toLowerCase().replace(' ', '').trim()),
     );
   const newAssignmentOptions = filteredNewAssignmentOptions.map((r) => (
     <Combobox.Option value={r.id} key={r.id}>
