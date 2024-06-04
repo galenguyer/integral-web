@@ -1,5 +1,5 @@
 import isMobile from './hooks/useIsMobile';
-import { AppShell, Group, Title } from '@mantine/core';
+import { AppShell, Button, Group, Menu, Title, rem } from '@mantine/core';
 import { Routes, Route } from 'react-router-dom';
 import { useHeader } from './hooks/useHeader';
 import SimpleLink from './components/SimpleLink';
@@ -13,6 +13,7 @@ import JobPage from './pages/Job';
 import ResourcesPage from './pages/Resources';
 import NewResourcePage from './pages/NewResource';
 import DashboardPage from './pages/Dashboard';
+import { IconLogout } from '@tabler/icons-react';
 
 function App() {
   const { brand, link } = useHeader();
@@ -47,7 +48,22 @@ function App() {
               <SimpleLink to="/resources">Resources</SimpleLink>
             </Group>
             {!mobile && auth.isAuthenticated() ? (
-              <span>{auth.getDn()}</span>
+              <Menu width={160}>
+                <Menu.Target>
+                  <Button variant="default">{auth.getDn()}</Button>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    color="red"
+                    leftSection={
+                      <IconLogout style={{ width: rem(14), height: rem(14) }} />
+                    }
+                    onClick={() => auth.signout()}
+                  >
+                    Log Out
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
             ) : (
               ''
             )}

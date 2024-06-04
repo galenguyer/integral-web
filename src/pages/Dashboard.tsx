@@ -59,7 +59,9 @@ const DashboardPage = () => {
     openJobs &&
     openJobs
       .sort((a, b) => b.createdAt - a.createdAt)
-      .map((job) => <JobTableRow key={job.id} job={job} resources={resources} />);
+      .map((job) => (
+        <JobTableRow key={job.id} job={job} resources={resources} />
+      ));
   const resourceRows =
     resources &&
     resources
