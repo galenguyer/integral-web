@@ -2,13 +2,11 @@ import { useParams } from 'react-router-dom';
 import { RequireAuth, useAuth } from '../hooks/useAuth';
 import {
   Button,
-  Card,
   CloseButton,
   Combobox,
   Container,
   Group,
   Menu,
-  NativeSelect,
   Stack,
   Text,
   TextInput,
@@ -18,38 +16,39 @@ import {
 import { useEffect, useState } from 'react';
 import { useSystem } from '../hooks/useSystem';
 import { IJob, IResource } from '../types';
-import { IconLogout, IconSquareRoundedMinus } from '@tabler/icons-react';
+import { IconSquareRoundedMinus } from '@tabler/icons-react';
 
 const buildComments = (job: IJob, resources: IResource[]) => {
-  return job.comments.concat(
-    job.assignments
-      .map((assignment) => {
-        const resourceName = resources.find(
-          (r) => r.id == assignment.resourceId,
-        )?.displayName;
-        let assignmentComments = [
-          {
-            id: assignment.id,
-            createdAt: assignment.assignedAt,
-            createdBy: assignment.assignedBy,
-            jobId: assignment.jobId,
-            comment: `${resourceName} was assigned by a dispatcher`,
-          },
-        ];
-        if (assignment.removedAt) {
-          assignmentComments.push({
-            id: assignment.id,
-            createdAt: assignment.removedAt,
-            createdBy: assignment.removedBy ?? '',
-            jobId: assignment.jobId,
-            comment: `${resourceName} was removed by ${job.closedAt && Math.abs(job.closedAt - assignment.removedAt) <= 1 ? 'job close' : 'a dispatcher'}`,
-          });
-        }
-        return assignmentComments;
-      })
-      .flat()
-      .sort((a: any, b: any) => b.createdAt - a.createdAt),
-  );
+  return job.comments
+    .concat(
+      job.assignments
+        .map((assignment) => {
+          const resourceName = resources.find(
+            (r) => r.id == assignment.resourceId,
+          )?.displayName;
+          let assignmentComments = [
+            {
+              id: assignment.id,
+              createdAt: assignment.assignedAt,
+              createdBy: assignment.assignedBy,
+              jobId: assignment.jobId,
+              comment: `${resourceName} was assigned by a dispatcher`,
+            },
+          ];
+          if (assignment.removedAt) {
+            assignmentComments.push({
+              id: assignment.id,
+              createdAt: assignment.removedAt,
+              createdBy: assignment.removedBy ?? '',
+              jobId: assignment.jobId,
+              comment: `${resourceName} was removed by ${job.closedAt && Math.abs(job.closedAt - assignment.removedAt) <= 1 ? 'job close' : 'a dispatcher'}`,
+            });
+          }
+          return assignmentComments;
+        })
+        .flat(),
+    )
+    .sort((a: any, b: any) => b.createdAt - a.createdAt);
 };
 
 const JobPage = () => {
@@ -65,8 +64,14 @@ const JobPage = () => {
 
   const combobox = useCombobox();
   const [newAssignmentId, setNewAssignmentId] = useState('');
+  useEffect(() => {
+    // we need to wait for options to render before we can select first one
+    combobox.selectFirstOption();
+  }, [newAssignmentId]);
 
-  const submitComment = () => {
+  const submitComment = (event: any) => {
+    event.preventDefault();
+
     if (newComment == '') {
       return;
     }
@@ -151,10 +156,6 @@ const JobPage = () => {
       {r.displayName}
     </Combobox.Option>
   ));
-  useEffect(() => {
-    // we need to wait for options to render before we can select first one
-    combobox.selectFirstOption();
-  }, [newAssignmentId]);
 
   return (
     <RequireAuth>
@@ -260,18 +261,23 @@ const JobPage = () => {
           </>
         )}
         {job.closedAt == null && (
-          <Group pt="lg">
-            <TextInput
-              placeholder="New Comment"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-            ></TextInput>
-            <Button onClick={() => submitComment()}>Add Comment</Button>
-          </Group>
+          <form onSubmit={(e) => submitComment(e)}>
+            <Group grow pt="lg">
+              <TextInput
+                placeholder="New Comment"
+                value={newComment}
+                style={{ flexGrow: 2 }}
+                onChange={(e) => setNewComment(e.target.value)}
+              ></TextInput>
+              <Button maw={rem('150')} type="submit">
+                Add Comment
+              </Button>
+            </Group>
+          </form>
         )}
         {comments.map((comment: any) => {
           return (
-            <p>
+            <p style={{ textWrap: 'wrap', wordWrap: 'break-word' }}>
               {new Date(comment.createdAt * 1000).toLocaleTimeString()} -{' '}
               {comment.comment}
             </p>
