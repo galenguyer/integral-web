@@ -173,7 +173,7 @@ export const SystemProvider = ({ children }: { children: any }) => {
     return () => {
       evtSource.close();
     };
-  }, []);
+  }, [localStorage.getItem('token')]);
 
   return (
     <SystemContext.Provider value={value}>{children}</SystemContext.Provider>
