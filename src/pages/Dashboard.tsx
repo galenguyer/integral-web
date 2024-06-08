@@ -72,6 +72,7 @@ const DashboardPage = () => {
   const resourceRows =
     resources &&
     resources
+      .filter((r) => r.inService)
       .sort((a, b) => (a.displayName > b.displayName ? 1 : -1))
       .map((r) => (
         <Table.Tr key={r.id}>
