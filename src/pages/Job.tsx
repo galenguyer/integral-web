@@ -152,15 +152,20 @@ const JobPage = () => {
   const comments = buildComments(job, resources);
 
   const filteredNewAssignmentOptions = resources
-    .filter((r) => !r.currentAssignment && r.inService)
+    .filter((r) => r.inService)
     .filter((r) =>
       r.displayName
         .toLowerCase()
         .replace(' ', '')
         .includes(newAssignmentId.toLowerCase().replace(' ', '').trim()),
-    );
+    )
+    .sort((a, b) => (a.displayName > b.displayName ? 1 : -1));
   const newAssignmentOptions = filteredNewAssignmentOptions.map((r) => (
-    <Combobox.Option value={r.id} key={r.id}>
+    <Combobox.Option
+      disabled={r.currentAssignment !== null}
+      value={r.id}
+      key={r.id}
+    >
       {r.displayName}
     </Combobox.Option>
   ));
@@ -272,7 +277,7 @@ const JobPage = () => {
                   />
                 </Combobox.Target>
 
-                <Combobox.Dropdown>
+                <Combobox.Dropdown mah={200} style={{ overflowY: 'auto' }}>
                   <Combobox.Options>
                     {newAssignmentOptions.length === 0 ? (
                       <Combobox.Empty>No Units Found</Combobox.Empty>
