@@ -1,5 +1,14 @@
 import isMobile from './hooks/useIsMobile';
-import { AppShell, Button, Group, Menu, Title, rem, useComputedColorScheme, useMantineColorScheme } from '@mantine/core';
+import {
+  AppShell,
+  Button,
+  Group,
+  Menu,
+  Title,
+  rem,
+  useComputedColorScheme,
+  useMantineColorScheme,
+} from '@mantine/core';
 import { Routes, Route } from 'react-router-dom';
 import { useHeader } from './hooks/useHeader';
 import SimpleLink from './components/SimpleLink';
@@ -57,18 +66,23 @@ function App() {
                   <Button variant="default">{auth.getDn()}</Button>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item 
-                        onClick={() =>
-                          setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')
-                        }
-                        leftSection={
-                          computedColorScheme === 'light' ? 
-                            <IconMoon style={{ width: rem(14), height: rem(14) }} /> :
-                            <IconSun style={{ width: rem(14), height: rem(14) }} />
-                        }
-                        aria-label="Toggle color scheme"
-                        >
-                          Switch to {computedColorScheme === 'light' ? 'Dark': 'Light'} Mode
+                  <Menu.Item
+                    onClick={() =>
+                      setColorScheme(
+                        computedColorScheme === 'light' ? 'dark' : 'light',
+                      )
+                    }
+                    leftSection={
+                      computedColorScheme === 'light' ? (
+                        <IconMoon style={{ width: rem(14), height: rem(14) }} />
+                      ) : (
+                        <IconSun style={{ width: rem(14), height: rem(14) }} />
+                      )
+                    }
+                    aria-label="Toggle color scheme"
+                  >
+                    Switch to{' '}
+                    {computedColorScheme === 'light' ? 'Dark' : 'Light'} Mode
                   </Menu.Item>
                   <Menu.Item
                     color="red"

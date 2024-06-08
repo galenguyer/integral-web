@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { RequireAuth } from '../hooks/useAuth';
-import { Button, Table } from '@mantine/core';
+import { Button, Table, useComputedColorScheme } from '@mantine/core';
 import { useSystem } from '../hooks/useSystem';
 import { IJob, IResource } from '../types';
 
@@ -30,6 +30,9 @@ const JobTableRow = ({
   resources: IResource[];
 }) => {
   const navigate = useNavigate();
+  const computedColorScheme = useComputedColorScheme('light', {
+    getInitialValueInEffect: true,
+  });
 
   const assignedResources =
     resources &&
@@ -44,14 +47,17 @@ const JobTableRow = ({
       : 'Pending Assignment';
   const backgroundColor = {
     Closed: undefined,
-    'In Progress': 'lightgreen',
+    'In Progress': computedColorScheme === 'light' ? 'lightgreen' : 'green',
     'Pending Assignment': 'yellow',
   }[jobStatus];
 
   return (
     <Table.Tr
       onDoubleClick={() => navigate(`/jobs/${job.id}`)}
-      style={{ backgroundColor: backgroundColor }}
+      style={{
+        backgroundColor: backgroundColor,
+        color: backgroundColor ? 'black' : undefined,
+      }}
       key={job.id}
     >
       <Table.Td>{job.synopsis}</Table.Td>

@@ -1,5 +1,12 @@
 import { RequireAuth } from '../hooks/useAuth';
-import { Card, Center, Group, SimpleGrid, Table } from '@mantine/core';
+import {
+  Card,
+  Center,
+  Group,
+  SimpleGrid,
+  Table,
+  useComputedColorScheme,
+} from '@mantine/core';
 import { useSystem } from '../hooks/useSystem';
 import { IJob, IResource } from '../types';
 import SimpleLink from '../components/SimpleLink';
@@ -13,6 +20,9 @@ const JobTableRow = ({
   resources: IResource[];
 }) => {
   const navigate = useNavigate();
+  const computedColorScheme = useComputedColorScheme('light', {
+    getInitialValueInEffect: true,
+  });
 
   const assignedResources =
     resources &&
@@ -27,14 +37,17 @@ const JobTableRow = ({
       : 'Pending Assignment';
   const backgroundColor = {
     Closed: undefined,
-    'In Progress': 'lightgreen',
+    'In Progress': computedColorScheme === 'light' ? 'lightgreen' : 'green',
     'Pending Assignment': 'yellow',
   }[jobStatus];
 
   return (
     <Table.Tr
       onDoubleClick={() => navigate(`/jobs/${job.id}`)}
-      style={{ backgroundColor: backgroundColor }}
+      style={{
+        backgroundColor: backgroundColor,
+        color: backgroundColor ? 'black' : undefined,
+      }}
       key={job.id}
     >
       <Table.Td>{job.synopsis}</Table.Td>
@@ -49,6 +62,9 @@ const DashboardPage = () => {
   const { useJobs, useResources } = useSystem();
   const { jobs } = useJobs();
   const { resources } = useResources();
+  const computedColorScheme = useComputedColorScheme('light', {
+    getInitialValueInEffect: true,
+  });
 
   const openJobs = jobs && jobs.filter((job) => job.closedAt == undefined);
   const jobsPendingAssignment =
@@ -98,6 +114,12 @@ const DashboardPage = () => {
               jobsPendingAssignment && jobsPendingAssignment.length == 0
                 ? undefined
                 : 'yellow',
+            color:
+              jobsPendingAssignment &&
+              jobsPendingAssignment.length != 0 &&
+              computedColorScheme === 'dark'
+                ? 'black'
+                : undefined,
           }}
           withBorder
         >
