@@ -26,6 +26,31 @@ export interface IResource {
   comment: string | undefined;
   inService: boolean;
   currentAssignment: IAssignment;
+  location: IGeocodeResponse | undefined
+}
+
+export interface IGeocodeResponse {
+  lat: string;
+  lon: string;
+  distance: number,
+  address: IRadarAddress
+}
+
+export interface IRadarAddress {
+  addressLabel: string | undefined;
+  city: string | undefined,
+  country: string | undefined,
+  countryCode: string | undefined,
+  county: string | undefined,
+  formattedAddress: string | undefined,
+  latitude: number | undefined,
+  layer: string | undefined,
+  longitude: number | undefined,
+  number: string | undefined,
+  postalCode: string | undefined,
+  state: string | undefined,
+  stateCode: string | undefined,
+  street: string | undefined,
 }
 
 export interface IAssignment {

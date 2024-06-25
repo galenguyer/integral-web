@@ -43,6 +43,7 @@ const ResourcesPage = () => {
                 : 'Out of Service'}
           </Table.Td>
           <Table.Td>{r.comment}</Table.Td>
+          <Table.Td>{r.location?.address.formattedAddress}</Table.Td>
         </Table.Tr>
       ));
 
@@ -55,6 +56,7 @@ const ResourcesPage = () => {
             <Table.Th>In Service</Table.Th>
             <Table.Th>Call</Table.Th>
             <Table.Th>Comments</Table.Th>
+            <Table.Th>Location</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
