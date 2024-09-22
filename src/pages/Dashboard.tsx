@@ -77,7 +77,7 @@ const DashboardPage = () => {
         ).length == 0
       );
     });
-
+    
   const jobRows =
     openJobs &&
     openJobs
@@ -89,9 +89,27 @@ const DashboardPage = () => {
     resources &&
     resources
       .filter((r) => r.inService)
-      .sort((a, b) => (a.displayName > b.displayName ? 1 : -1))
+      .sort((a, b) => {
+        if (a.currentAssignment && !b.currentAssignment) {
+          return -1;
+        }
+        if (b.currentAssignment && !a.currentAssignment) {
+          return 1;
+        }
+        if (a.currentAssignment && b.currentAssignment) {
+          return (a.currentAssignment.jobId > b.currentAssignment.jobId) ? 1 : -1
+        }
+        else {
+          return (a.displayName > b.displayName ? 1 : -1)
+        }
+      })
       .map((r) => (
-        <Table.Tr key={r.id}>
+        <Table.Tr key={r.id}
+        style={{
+          backgroundColor: r.currentAssignment ? computedColorScheme === 'light' ? 'lightgreen' : 'green' : undefined,
+          color: r.currentAssignment ? 'black' : undefined,
+        }}
+  >
           <Table.Td>{r.displayName}</Table.Td>
           <Table.Td>
             {r.currentAssignment
